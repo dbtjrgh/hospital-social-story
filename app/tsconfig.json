@@ -1,0 +1,8 @@
+{
+  // electron-vite 표준: 이 파일은 두 설정을 묶기만 함 (편집기가 파일마다 맞는 설정을 찾음)
+  //   tsconfig.node.json = Node 쪽 (Electron 창·프리로드, 설정 파일, tools, tests)
+  //   tsconfig.web.json  = 화면 (src/renderer/src)
+  // 타입 검사: yarn typecheck (= typecheck:node + typecheck:web)
+  "files": [],
+  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
+}

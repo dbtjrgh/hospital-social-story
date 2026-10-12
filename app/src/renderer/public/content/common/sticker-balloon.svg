@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 240 240">
+  <!-- 숨 쉬기 스티커: 풍선처럼 천천히 숨 쉬기 (임시 그림 — 디자이너 그림으로 바꿀 수 있음) -->
+  <defs>
+    <g id="o">
+      <ellipse cx="120" cy="100" rx="56" ry="64" fill="#b9a6f0"/>
+      <path d="M112 162 h16 l-4 10 h-8 z" fill="#9c86e6"/>
+    </g>
+  </defs>
+  <circle cx="120" cy="120" r="116" fill="#ece6fb"/>
+  <path d="M120 172 C 108 188 132 196 120 214" stroke="#9c86e6" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <use xlink:href="#o" href="#o" stroke="#ffffff" stroke-width="12" stroke-linejoin="round"/>
+  <use xlink:href="#o" href="#o"/>
+  <ellipse cx="98" cy="74" rx="12" ry="20" fill="#ffffff" opacity=".55" transform="rotate(-20 98 74)"/>
+  <path d="M40 92 q-10 8 0 16 M30 84 q-16 16 0 32" stroke="#cbbcf6" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M200 92 q10 8 0 16 M210 84 q16 16 0 32" stroke="#cbbcf6" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>

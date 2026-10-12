@@ -1,0 +1,32 @@
+appId: com.example.socialstory
+productName: 병원 검사 연습
+executableName: social-story
+directories:
+  output: release
+# 앱에 넣을 파일: electron-vite 빌드 결과(out/ = 창·프리로드·화면 + 공통 그림, out/player = 웹으로 내보내기 틀)와 창 아이콘 (원고 원본·문서는 넣지 않음)
+files:
+  - out/**/*
+  - resources/**/*
+# 새 프로젝트의 기본 틀 = 병원 팩 하나 (yarn build:app <병원id> 가 환경 변수 HOSPITAL 로 정함) → 설치 폴더 resources/template
+extraResources:
+  - from: ../hospitals/${env.HOSPITAL}
+    to: template
+  # 발표 자료 (메뉴 문서 → 발표 자료 열기, CLAUDE.md 5-1c). 이 공개본에는 presentation 폴더가 없음
+  - from: ../presentation
+    to: presentation
+# 탐색기에서 .ssproj 를 더블클릭하면 이 앱으로 열림 (src/main/index.ts ssprojArg)
+fileAssociations:
+  - ext: ssproj
+    name: 병원 검사 연습 프로젝트
+    description: 병원 검사 연습 프로젝트
+    icon: build/icon.ico
+# 아이콘: yarn icon (tools/make-icon.mjs) 이 build/icon.ico (설치·실행 파일), resources/icon.png (창) 을 만듦
+win:
+  icon: build/icon.ico
+  target:
+    - nsis
+nsis:
+  artifactName: social-story-${version}-setup.${ext}
+  shortcutName: 병원 검사 연습
+  oneClick: false
+  allowToChangeInstallationDirectory: true

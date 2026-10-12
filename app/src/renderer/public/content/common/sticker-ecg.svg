@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 240 240">
+  <!-- 패드 붙이기(심전도) 스티커 (임시 그림 — 디자이너 그림으로 바꿀 수 있음) -->
+  <defs>
+    <g id="o">
+      <path d="M120 186 C 70 152 44 124 44 94 C 44 70 62 54 84 54 C 100 54 112 63 120 76 C 128 63 140 54 156 54 C 178 54 196 70 196 94 C 196 124 170 152 120 186 Z" fill="#f28b9b"/>
+      <circle cx="62" cy="168" r="20" fill="#ffffff"/>
+      <circle cx="182" cy="168" r="20" fill="#ffffff"/>
+    </g>
+  </defs>
+  <circle cx="120" cy="120" r="116" fill="#fff1c9"/>
+  <ellipse cx="120" cy="198" rx="78" ry="8" fill="#5a4400" opacity=".08"/>
+  <use xlink:href="#o" href="#o" stroke="#ffffff" stroke-width="12" stroke-linejoin="round"/>
+  <use xlink:href="#o" href="#o"/>
+  <path d="M58 114 H92 L102 92 L116 136 L128 104 L136 114 H182" stroke="#ffffff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="62" cy="168" r="8" fill="#c4cfdd"/>
+  <circle cx="182" cy="168" r="8" fill="#c4cfdd"/>
+  <circle cx="62" cy="168" r="20" fill="none" stroke="#c4cfdd" stroke-width="2"/>
+  <circle cx="182" cy="168" r="20" fill="none" stroke="#c4cfdd" stroke-width="2"/>
+</svg>

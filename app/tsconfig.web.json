@@ -1,0 +1,23 @@
+{
+  // 화면(src/renderer/src): 브라우저·Electron 창 안에서 도는 React 코드. 웹 납품과 앱이 같이 씀
+  // Vite 타입은 src/renderer/src/env.d.ts 가 불러옴
+  "compilerOptions": {
+    "composite": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": []
+  },
+  "include": ["src/renderer/src"]
+}

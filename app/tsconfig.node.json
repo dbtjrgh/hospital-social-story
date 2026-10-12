@@ -1,0 +1,36 @@
+{
+  // Node 쪽: Electron 창(src/main)·프리로드(src/preload), 설정 파일, 도구(tools), 자동 점검(tests)
+  // DOM 타입도 켬: 자동 점검이 page.evaluate 안에서 document 를 씀
+  "compilerOptions": {
+    "composite": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": ["node"]
+  },
+  "include": [
+    "src/main",
+    "src/preload",
+    "electron.vite.config.ts",
+    "vite.config.ts",
+    "playwright.config.ts",
+    "tools/**/*.ts",
+    "tests",
+    // 개발 동기화 메시지 모양: 서버 플러그인(tools/devsync-plugin.ts)과 화면이 같이 씀 (타입만 있는 파일)
+    "src/renderer/src/devsync/protocol.ts",
+    // 원고 모양·규칙·구조 바꾸기: 원고 검사기(tools/check.mjs)·자동 점검(tests/structure.spec.ts)도 같이 씀 (화면 코드를 안 불러오는 파일)
+    "src/renderer/src/content/types.ts",
+    "src/renderer/src/content/rules.ts",
+    "src/renderer/src/editor/structure.ts"
+  ]
+}

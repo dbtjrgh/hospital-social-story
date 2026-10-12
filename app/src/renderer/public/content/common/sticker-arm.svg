@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 240 240">
+  <!-- 팔 준비하기 스티커: 받침대 위에 쭉 편 팔 (임시 그림 — 디자이너 그림으로 바꿀 수 있음) -->
+  <defs>
+    <g id="o">
+      <rect x="30" y="140" width="184" height="22" rx="11" fill="#c9b6ab"/>
+      <rect x="92" y="160" width="16" height="34" rx="6" fill="#b09b8f"/>
+      <rect x="66" y="188" width="68" height="12" rx="6" fill="#b09b8f"/>
+      <rect x="26" y="88" width="68" height="56" rx="20" fill="#f4a9c0"/>
+      <rect x="84" y="100" width="104" height="34" rx="17" fill="#f6d7c3"/>
+      <circle cx="194" cy="116" r="22" fill="#f6d7c3"/>
+    </g>
+  </defs>
+  <circle cx="120" cy="120" r="116" fill="#fde6ee"/>
+  <ellipse cx="122" cy="206" rx="80" ry="8" fill="#5a1d33" opacity=".07"/>
+  <use xlink:href="#o" href="#o" stroke="#ffffff" stroke-width="12" stroke-linejoin="round"/>
+  <use xlink:href="#o" href="#o"/>
+  <path d="M84 96 v52" stroke="#e58aa6" stroke-width="5" stroke-linecap="round"/>
+  <path d="M40 104 h40 M40 120 h40" stroke="#ffd0de" stroke-width="4" stroke-linecap="round"/>
+</svg>

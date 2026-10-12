@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 240 240">
+  <!-- 눕기 스티커 (임시 그림 — 디자이너 그림으로 바꿀 수 있음) -->
+  <defs>
+    <g id="o">
+      <rect x="36" y="74" width="24" height="100" rx="10" fill="#6f9fe0"/>
+      <rect x="44" y="158" width="14" height="30" rx="6" fill="#5585c9"/>
+      <rect x="184" y="158" width="14" height="30" rx="6" fill="#5585c9"/>
+      <rect x="44" y="132" width="160" height="34" rx="12" fill="#6f9fe0"/>
+      <rect x="54" y="112" width="148" height="30" rx="12" fill="#ffffff"/>
+      <rect x="62" y="94" width="50" height="28" rx="14" fill="#eef4ff"/>
+      <path d="M116 108 h72 a14 14 0 0 1 14 14 v20 h-86 z" fill="#9cc8f2"/>
+    </g>
+  </defs>
+  <circle cx="120" cy="120" r="116" fill="#d4f0e3"/>
+  <ellipse cx="122" cy="196" rx="84" ry="8" fill="#1d3b2f" opacity=".08"/>
+  <use xlink:href="#o" href="#o" stroke="#ffffff" stroke-width="12" stroke-linejoin="round"/>
+  <use xlink:href="#o" href="#o"/>
+  <path d="M124 122 h66" stroke="#7fb3e6" stroke-width="4" stroke-linecap="round"/>
+  <path d="M74 104 q12 -6 26 0" stroke="#d3e1f5" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>

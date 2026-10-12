@@ -1,0 +1,50 @@
+/* 디자인 토큰: 시안의 차분한 하늘색 계열. 글자 대비 4.5:1 이상으로 고름. */
+:root {
+  --bg-page: #dcebff;
+  --bg-frame: #f5faff;
+  --surface: #ffffff;
+  --surface-soft: #eef5fe;
+  --ink: #16325c;
+  --ink-soft: #46608a;
+  --line: #d6e4f5;
+
+  --primary: #2a6bd1;
+  --primary-press: #2159b3;
+  --primary-soft: #e3efff;
+  --primary-line: #b9d4fa;
+  --on-primary: #ffffff;
+  --success: #17885c;
+  --success-press: #12704b;
+  --success-soft: #dcf4e8;
+  --star: #ffc93c;
+  --star-soft: #fff3cc;
+  --calm: #5a6d91;
+
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --shadow-card: 0 6px 18px rgba(22, 50, 92, 0.08);
+  --shadow-press: 0 2px 6px rgba(22, 50, 92, 0.12);
+
+  --font: 'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --text-scale: 1;
+  --fs-small: calc(17px * var(--text-scale));
+  --fs-body: calc(20px * var(--text-scale));
+  --fs-sub: calc(clamp(19px, 3.6cqw, 24px) * var(--text-scale));
+  --fs-action: calc(clamp(26px, 5.8cqw, 38px) * var(--text-scale));
+  --fs-title: calc(clamp(26px, 5.4cqw, 36px) * var(--text-scale));
+  --tap: 64px;
+  --gutter: clamp(16px, 4cqw, 32px);
+
+  /* 검사별 강조색 (버튼 색은 모든 검사에서 같게 유지 → 같은 기능 = 같은 색) */
+  --accent: #2a6bd1;
+  --accent-soft: #e3efff;
+  --accent-line: #b9d4fa;
+}
+
+[data-theme='blue'] { --accent: #2a6bd1; --accent-soft: #e3efff; --accent-line: #b9d4fa; }
+[data-theme='green'] { --accent: #1b7a52; --accent-soft: #def4e8; --accent-line: #b2e0c8; }
+[data-theme='yellow'] { --accent: #8a5a00; --accent-soft: #fff3d1; --accent-line: #f3d98f; }
+[data-theme='pink'] { --accent: #b23a63; --accent-soft: #fde6ee; --accent-line: #f5c0d2; }
+[data-theme='purple'] { --accent: #6a4fc6; --accent-soft: #ece6fb; --accent-line: #d0c4f3; }
