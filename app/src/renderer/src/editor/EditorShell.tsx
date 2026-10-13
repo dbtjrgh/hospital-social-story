@@ -3,6 +3,7 @@
 //   왼쪽: 페이지 목록 (누르면 그 페이지로)   가운데: 플레이어 그대로   오른쪽: 이 페이지의 사진·소리 + 효과음
 //   사진은 가운데 화면의 사진 위에서도 바꿈 (PhotoEdit). 누구나 쓰게: 쉬운 말, 끌어다 놓기, 되돌리기
 //   양옆 칸 너비는 가장자리 손잡이를 끌어서 바꿈 (PanelResizer)
+//   태블릿 크기(창 폭 1311px 이하)에서는 페이지 목록이 서랍("☰ 페이지"), 세로면 고치는 칸이 아래로 (editor.css 맨 아래)
 import { useEffect, useRef, useState, type DragEvent, type ReactNode } from 'react';
 import { catalog, getExam, hospital } from '../content';
 import { asset, isVideo } from '../lib/asset';
@@ -10,7 +11,7 @@ import { navigate, toHash, useRoute, type Route } from '../lib/router';
 import { effectFile } from '../lib/sound';
 import { removeEffect, removeSense, removeVoice, replaceMedia, resetPhoto, setEffect, setSense, setVoice } from './actions';
 import { CheckDialog } from './CheckDialog';
-import { DEVICES, restartPreview, setCheckOpen, setDevice, setExportOpen, setMode, useEditor } from './editorState';
+import { DEVICES, refreshDevice, restartPreview, setCheckOpen, setDevice, setExportOpen, setMode, useEditor } from './editorState';
 import { ExportDialog } from './ExportDialog';
 import { ExamListSettings, StepSettings, TextPanel } from './PagePanel';
 import { PanelResizer } from './PanelResizer';
@@ -22,10 +23,23 @@ import './editor.css';
 export function EditorShell({ children }: { children: ReactNode }) {
   const { mode, busy } = useEditor();
   const route = useRoute();
+  // 태블릿 크기에서 페이지 목록 서랍 (넓은 화면에서는 늘 보여서 이 값은 안 씀 — editor.css)
+  const [listOpen, setListOpen] = useState(false);
+  const here = toHash(route);
+  useEffect(() => setListOpen(false), [here, mode]);
+  useEffect(() => {
+    if (!listOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setListOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [listOpen]);
   return (
     <>
-      <Toolbar route={route} />
-      {mode === 'edit' && <PageList route={route} />}
+      <Toolbar route={route} listOpen={listOpen} onToggleList={() => setListOpen((o) => !o)} />
+      {mode === 'edit' && <PageList route={route} open={listOpen} onPick={() => setListOpen(false)} />}
+      {mode === 'edit' && listOpen && <button type="button" className="ed-scrim" aria-label="페이지 목록 닫기" onClick={() => setListOpen(false)} />}
       {mode === 'edit' && <PanelResizer side="left" />}
       {children}
       {mode === 'edit' && <SlotPanel route={route} />}
@@ -46,10 +60,19 @@ function hhmm(iso: string): string {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
 
-function Toolbar({ route }: { route: Route }) {
+function Toolbar({ route, listOpen, onToggleList }: { route: Route; listOpen: boolean; onToggleList: () => void }) {
   const { mode, edit, notice, device, scale, exportOpen, check, checkOpen } = useEditor();
   const checking = check?.kind === 'done' && !!check.result.url;
   const [missingOpen, setMissingOpen] = useState(false);
+  // 미리보기 기기 배율은 도구 막대 아래 끝 기준 → 막대가 그려지거나 두 줄이 되면 다시 계산
+  const barRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    const ro = new ResizeObserver(() => refreshDevice());
+    ro.observe(bar);
+    return () => ro.disconnect();
+  }, []);
   const missing = missingSlots();
   const issues = textIssues(pageLabel);
   const missingCount = missing.photos.length + missing.temps.length + missing.voices.length + missing.senses.length + missing.effects.length + issues.length;
@@ -62,7 +85,12 @@ function Toolbar({ route }: { route: Route }) {
   }
 
   return (
-    <header className="ed-toolbar">
+    <header className="ed-toolbar" ref={barRef}>
+      {mode === 'edit' && (
+        <button type="button" className="ed-btn ed-listbtn" aria-expanded={listOpen} onClick={onToggleList} title="페이지 목록">
+          ☰ 페이지
+        </button>
+      )}
       <div className="ed-toolbar__title">
         <strong>{hospital.name}</strong>
         <span className="ed-muted">{status}</span>
@@ -225,7 +253,7 @@ function MissingPanel({ route, onClose }: { route: Route; onClose: () => void })
 
 // ───────── 왼쪽: 페이지 목록 ─────────
 
-function PageList({ route }: { route: Route }) {
+function PageList({ route, open, onPick }: { route: Route; open: boolean; onPick: () => void }) {
   const here = toHash(route);
   const listRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -233,14 +261,21 @@ function PageList({ route }: { route: Route }) {
   }, [here]);
   const item = (to: Route, label: string, mark?: 'missing' | 'temp' | 'ok') => (
     <li key={toHash(to)}>
-      <button type="button" aria-current={toHash(to) === here ? 'page' : undefined} onClick={() => navigate(to)}>
+      <button
+        type="button"
+        aria-current={toHash(to) === here ? 'page' : undefined}
+        onClick={() => {
+          navigate(to);
+          onPick();
+        }}
+      >
         {mark && <span className={`ed-dot ed-dot--${mark}`} aria-hidden="true" />}
         <span>{label}</span>
       </button>
     </li>
   );
   return (
-    <nav className="ed-left" ref={listRef} aria-label="페이지 목록">
+    <nav className={`ed-left${open ? ' is-open' : ''}`} ref={listRef} aria-label="페이지 목록">
       <ul>{item({ name: 'home' }, '첫 화면')}</ul>
       {catalog.map((c) => {
         const exam = getExam(c.id);
@@ -429,27 +464,34 @@ function SlotPanel({ route }: { route: Route }) {
     // 페이지가 바뀌면 칸을 새로 (고치던 글이 다른 페이지 칸에 남지 않게)
     <aside key={toHash(route)} className="ed-right" aria-label="이 페이지 고치기">
       <h2>{page}</h2>
-      {route.name === 'home' && <ExamListSettings />}
-      <TextPanel route={route} page={page} />
-      {isStep && <StepSettings exam={exam} index={stepIndex} />}
-      <h3 className="ed-sec__title">사진·소리</h3>
-      {slots.length === 0 ? (
-        <p className="ed-muted">이 페이지에는 바꿀 사진·소리가 없어요.</p>
-      ) : (
-        <ul className="ed-slots">
-          {slots.map((s) => (
-            <SlotRow key={`${s.kind}-${s.label}`} slot={s} />
-          ))}
-        </ul>
-      )}
-      <details className="ed-effects">
-        <summary>효과음 (모든 페이지 공통)</summary>
-        <ul className="ed-slots">
-          {effectSlots().map((s) => (
-            <EffectRow key={s.id} slot={s} />
-          ))}
-        </ul>
-      </details>
+      {/* 두 묶음: 넓은 화면에서는 위아래 그대로, 세로 태블릿(칸이 아래로 갈 때)에서는 왼쪽 글 · 오른쪽 단계·사진·소리 (editor.css) */}
+      <div className="ed-right__body">
+        <div className="ed-right__col">
+          {route.name === 'home' && <ExamListSettings />}
+          <TextPanel route={route} page={page} />
+        </div>
+        <div className="ed-right__col">
+          {isStep && <StepSettings exam={exam} index={stepIndex} />}
+          <h3 className="ed-sec__title">사진·소리</h3>
+          {slots.length === 0 ? (
+            <p className="ed-muted">이 페이지에는 바꿀 사진·소리가 없어요.</p>
+          ) : (
+            <ul className="ed-slots">
+              {slots.map((s) => (
+                <SlotRow key={`${s.kind}-${s.label}`} slot={s} />
+              ))}
+            </ul>
+          )}
+          <details className="ed-effects">
+            <summary>효과음 (모든 페이지 공통)</summary>
+            <ul className="ed-slots">
+              {effectSlots().map((s) => (
+                <EffectRow key={s.id} slot={s} />
+              ))}
+            </ul>
+          </details>
+        </div>
+      </div>
     </aside>
   );
 }

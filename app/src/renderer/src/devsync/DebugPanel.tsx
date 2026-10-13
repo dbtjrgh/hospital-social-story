@@ -170,7 +170,7 @@ function DebugPanel({ api }: { api: DevSyncApi }) {
 }
 
 /**
- * 제작 방향서 바로 보기 (본인 요청 2026-10-07): "발달장애인을 위한 병원방문 지원 콘텐츠 <소셜 스토리> 제작 방향" PDF.
+ * 제작 방향서 바로 보기 (본인 요청 2026-10-07): 제작 방향 PDF.
  * (시안 m1~m5 이미지는 2026-10-09에 지움)
  * 개발 서버가 _mockups 폴더를 그대로 내려줌. 이 패널은 개발 때만 있어서 납품 빌드에는 PDF가 들어가지 않음.
  */
@@ -179,15 +179,15 @@ function BriefSection() {
   return (
     <section className="ds-section">
       <h2 className="ds-h">제작 방향서</h2>
-      <a className="ds-btn ds-brief" href={`${base}brief_260918.pdf`} target="_blank" rel="noreferrer">
+      <a className="ds-btn ds-brief" href={`${base}brief.pdf`} target="_blank" rel="noreferrer">
         제작 방향 PDF 열기
       </a>
-      <p className="ds-note">발달장애인을 위한 병원방문 지원 콘텐츠 &lt;소셜 스토리&gt; 제작 방향 (2026.09)</p>
+      <p className="ds-note">제작 방향 문서 (고객 자료라 공개본에는 없음)</p>
       {/* 발표 슬라이드 (본인 요청 2026-10-07): 태블릿 하나를 TV에 연결해 발표 → 시연. presentation/ 도 개발 서버만 내려줌 */}
       <a className="ds-btn ds-brief" href={`${import.meta.env.BASE_URL}presentation/`} target="_blank" rel="noreferrer">
         발표 슬라이드 열기
       </a>
-      <p className="ds-note">진행 보고 9장. 누르거나 밀어서 넘기기, 마지막 장 "다음: 시연"을 누르면 앱이 열림</p>
+      <p className="ds-note">진행 보고 7장. 누르거나 밀어서 넘기기, 마지막 장 "다음: 시연"을 누르면 앱이 열림</p>
     </section>
   );
 }

@@ -257,8 +257,15 @@ const JOIN_WAIT_MS = 1500;
 let joining = false;
 let joinTimer: number | undefined;
 
+/**
+ * 편집기 기기(Electron 편집기 창 = window.ssApp 이 있을 때)는 진행·설정을 주고받지 않음 (10-12 검토):
+ * 편집 모드는 설정을 잠시 덮어쓰고(자동 읽기·셋업 창 끔 등) 미리보기는 빈 기록이라, 보내면 다른 기기에 그대로 저장됨.
+ * 페이지 따라가기·화면 보기는 그대로
+ */
+const editorDevice = !!window.ssApp;
+
 function askState(): void {
-  if (!snap.self.follow) return;
+  if (!snap.self.follow || editorDevice) return;
   joining = true;
   window.clearTimeout(joinTimer);
   joinTimer = window.setTimeout(() => {
@@ -268,7 +275,7 @@ function askState(): void {
 }
 
 function onStoreChange(_state: AppState, meta: { remote: boolean }): void {
-  if (meta.remote || applyingRemote || joining) return;
+  if (editorDevice || meta.remote || applyingRemote || joining) return;
   // 소리 크기 슬라이더처럼 연달아 바뀌면 마지막 것만 보냄
   if (stateTimer !== undefined) return;
   stateTimer = window.setTimeout(() => {
@@ -278,7 +285,7 @@ function onStoreChange(_state: AppState, meta: { remote: boolean }): void {
 }
 
 function onRemoteState(msg: StateMsg): void {
-  if (msg.from === id) return;
+  if (msg.from === id || editorDevice) return;
   if (msg.ask) {
     // 막 들어온 기기가 물어봄 → 내 상태를 알려 줌 (나도 기다리는 중이면 빈 기록일 수 있어 안 보냄)
     if (!joining && snap.self.follow) send('devsync:state', { from: id, name, state: getState() });

@@ -52,6 +52,12 @@ body.is-editor .stage {
 .ed-toolbar__title strong {
   font-size: 16px;
 }
+/* 좁으면 한 글자씩 세로로 쌓이던 것 (10-12) → 한 줄로 두고 넘치면 … */
+.ed-toolbar__title > * {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .ed-toolbar__actions {
   display: flex;
   align-items: center;
@@ -846,4 +852,139 @@ body.is-previewing.pv-device .stage {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 16px;
+}
+
+/* ── 태블릿 크기 (본인 요청 2026-10-12 "세로·가로 모두 보기 좋게") ──
+   양옆 칸(272 + 340)을 그대로 두면 가운데(아이 화면)가 700px 이 안 돼 화면 모양(base.css @container stage) 어디에도 안 맞음
+   → 사진이 커지고 문장이 아래 버튼 뒤로 감(가로), 폭 360 폰 모양(세로). 그래서 창 폭 1311px 이하에서는:
+   · 페이지 목록 = 서랍 ("☰ 페이지" 버튼, 고르면 닫힘) · 칸 너비 손잡이 없음
+   · 가로(1000px 이상): 오른쪽 칸만 옆에, 조금 좁게 → 가운데가 가로 태블릿 모양
+   · 세로(또는 1000px 미만): 위 아이 화면 · 아래 고치는 칸(넓으면 2단) → 가운데가 가로 태블릿 모양
+   · 1000px 미만, 미리보기: 도구 막대 두 줄
+   1312px 이상(PC, 최대화한 Electron 창)은 그대로 */
+.ed-listbtn,
+.ed-scrim {
+  display: none;
+}
+@media (max-width: 1311px) {
+  body.is-editing {
+    padding-left: 0;
+  }
+  .ed-listbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .ed-listbtn[aria-expanded='true'] {
+    background: var(--ed-blue-soft);
+    border-color: var(--ed-blue);
+    color: var(--ed-blue);
+  }
+  .ed-resizer {
+    display: none;
+  }
+  .ed-left {
+    z-index: 58;
+    width: min(320px, 86vw);
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform 0.2s ease, visibility 0.2s;
+  }
+  .ed-left.is-open {
+    transform: none;
+    visibility: visible;
+    box-shadow: 8px 0 32px rgba(22, 50, 92, 0.22);
+  }
+  .ed-left li button {
+    min-height: 40px; /* 손가락으로 고르기 좋게 */
+  }
+  .ed-scrim {
+    display: block;
+    position: fixed;
+    inset: var(--ed-top) 0 0 0;
+    z-index: 57;
+    border: 0;
+    padding: 0;
+    background: rgba(22, 50, 92, 0.25);
+  }
+}
+@media (max-width: 1311px) and (min-width: 1000px) and (orientation: landscape) {
+  body.is-editing {
+    --ed-rc: clamp(280px, 30vw, 360px);
+    padding-right: calc(var(--ed-rc) + var(--side-dock, 0px));
+  }
+  body.is-editing .ed-right {
+    width: var(--ed-rc);
+  }
+  body.is-editing .ed-adjust__bar {
+    left: calc((100vw - var(--ed-rc)) / 2);
+    max-width: calc(100vw - var(--ed-rc) - 24px);
+  }
+}
+@media (max-width: 1311px) and (orientation: portrait), (max-width: 999px) {
+  body.is-editing {
+    /* 아래 칸: 위 아이 화면에 610px(가로 태블릿 모양이 한 화면에 들어가는 높이)을 먼저 주고 남는 만큼, 280~560px */
+    --ed-bottom: clamp(280px, calc(100vh - var(--ed-top) - 610px), 560px);
+    --ed-bottom: clamp(280px, calc(100dvh - var(--ed-top) - 610px), 560px);
+    padding-right: 0;
+    padding-bottom: var(--ed-bottom);
+  }
+  body.is-editing .stage {
+    height: calc(100vh - var(--ed-top) - var(--ed-bottom));
+    height: calc(100dvh - var(--ed-top) - var(--ed-bottom));
+  }
+  body.is-editing .ed-right {
+    top: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: var(--ed-bottom);
+    padding: 14px 16px 28px;
+    border-left: 0;
+    border-top: 1px solid var(--ed-line);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -10px 30px rgba(22, 50, 92, 0.1);
+  }
+  body.is-editing .ed-adjust__bar {
+    left: 50%;
+    bottom: calc(var(--ed-bottom) + 12px);
+    max-width: calc(100vw - 24px);
+  }
+}
+@media (max-width: 1311px) and (min-width: 640px) and (orientation: portrait), (min-width: 640px) and (max-width: 999px) {
+  .ed-right__body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+    align-items: start;
+  }
+}
+/* 도구 막대 두 줄: 위 = 페이지·이름·편집/미리보기(·기기 크기), 아래 = 되돌리기 ~ 저장 */
+@media (max-width: 999px) {
+  body.is-editor {
+    --ed-top: 104px;
+  }
+  .ed-toolbar {
+    flex-wrap: wrap;
+    align-content: center;
+    gap: 8px 10px;
+    padding: 6px 12px;
+  }
+  .ed-toolbar__actions {
+    flex: 1 0 100%;
+  }
+}
+@media (max-width: 1311px) {
+  body.is-editor.is-previewing {
+    --ed-top: 104px;
+  }
+  body.is-previewing .ed-toolbar {
+    flex-wrap: wrap;
+    align-content: center;
+    gap: 8px 10px;
+    padding: 6px 12px;
+  }
+  body.is-previewing .ed-toolbar__actions {
+    flex: 1 0 100%;
+  }
 }

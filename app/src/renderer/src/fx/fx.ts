@@ -273,7 +273,11 @@ class FxEngine {
     const r = el.getBoundingClientRect();
     const h = this.host.getBoundingClientRect();
     if (r.width === 0 && r.height === 0) return null;
-    return { x: r.left - h.left, y: r.top - h.top, w: r.width, h: r.height };
+    // 편집기 미리보기는 기기 틀을 통째로 줄여 보여 줌(CSS scale) → 화면 좌표(줄어든 값)를 캔버스 좌표(줄이기 전)로.
+    // 안 나누면 캔버스도 같이 줄어 두 번 줄어듦 → 빛 고리가 작아지고 왼쪽 위로 밀렸음 (10-13 시연). 웹 납품 화면은 1이라 그대로
+    const sx = this.host.offsetWidth ? h.width / this.host.offsetWidth : 1;
+    const sy = this.host.offsetHeight ? h.height / this.host.offsetHeight : 1;
+    return { x: (r.left - h.left) / sx, y: (r.top - h.top) / sy, w: r.width / sx, h: r.height / sy };
   }
 
   /**

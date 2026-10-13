@@ -127,7 +127,8 @@ function applyDevice() {
     }
     return;
   }
-  const top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ed-top')) || 56;
+  // 도구 막대 아래 끝 = 실제 위쪽 높이 (좁은 창의 두 줄 막대 포함 — --ed-top 은 body 에서 바뀌어 :root 값으로는 모름)
+  const top = document.querySelector('.ed-toolbar')?.getBoundingClientRect().bottom || 56;
   const scale = Math.min(1, (window.innerWidth - 48) / (dev.w + 24), (window.innerHeight - top - 48) / (dev.h + 24));
   const root = document.documentElement.style;
   root.setProperty('--pv-w', `${dev.w}px`);
@@ -301,6 +302,11 @@ function runAfterReload(): void {
   if (after.goto) navigate(after.goto, { replace: true });
   if (after.focus) pendingFocus = after.focus;
   if (after.notice) showNotice(after.notice);
+}
+
+/** 도구 막대 크기가 바뀌면(처음 그려질 때, 좁은 창에서 두 줄이 될 때) 미리보기 배율 다시 (EditorShell Toolbar) */
+export function refreshDevice(): void {
+  applyDevice();
 }
 
 /** 편집기 시작 (boot.tsx): 모드 적용, 저장 상태 받기, 메뉴의 편집 모드·미리보기 듣기 */
